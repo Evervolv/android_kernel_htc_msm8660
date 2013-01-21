@@ -1110,6 +1110,10 @@ static void msg_process_noisesuppression(struct atmel_ts_data *ts, uint8_t *data
 				ts->GCAF_sample = ts->GCAF_level[loop_i];
 				break;
 			}
+ 			if (!ts->finger_count) {
+				// Force re-calibrate whenever we run out of fingers
+				atmel_unlock_store(NULL, NULL, "2\n" , 1);
+			}
 		}
 		if (loop_i == 5)
 			ts->GCAF_sample += 24;
