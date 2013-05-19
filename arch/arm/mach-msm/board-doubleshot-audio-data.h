@@ -12,7 +12,7 @@
  *
  */
 
-#include <linux/spi/spi_aic3254.h>
+#include <linux/spi_aic3254.h>
 
 static CODEC_SPI_CMD LOOPBACK_DSP_INIT[] = {
 	{'w', 0x00, 0x01},

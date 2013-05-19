@@ -101,7 +101,7 @@
 #include <mach/htc_headset_misc.h>
 #include <mach/htc_headset_8x60.h>
 #include <linux/i2c/isl9519.h>
-#include <mach/tpa2051d3.h>
+#include <linux/tpa2051d3.h>
 #ifdef CONFIG_USB_G_ANDROID
 #include <linux/usb/android.h>
 #include <mach/usbdiag.h>

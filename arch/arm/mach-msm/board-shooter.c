@@ -99,7 +99,7 @@
 #include <linux/i2c/isl9519.h>
 #ifdef CONFIG_USB_G_ANDROID
 #include <linux/usb/android.h>
-#include <mach/tpa2051d3.h>
+#include <linux/tpa2051d3.h>
 #include <mach/usbdiag.h>
 #endif
 #include <linux/regulator/consumer.h>

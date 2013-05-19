@@ -52,7 +52,7 @@
 
 #include <mach/qdsp6v2_1x/snddev_hdmi.h>
 #include "snddev_mi2s.h"
-#include <linux/spi/spi_aic3254.h>
+#include <linux/spi_aic3254.h>
 
 #include "snddev_virtual.h"
 

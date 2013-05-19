@@ -32,7 +32,7 @@
 #include <mach/pmic.h>
 #include <mach/debug_mm.h>
 #include <mach/qdsp6v2_1x/snddev_icodec.h>
-#include <linux/spi/spi_aic3254.h>
+#include <linux/spi_aic3254.h>
 #include <mach/qdsp6v2_1x/q6afe.h>
 #include "audio_acdb.h"
 
