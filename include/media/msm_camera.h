@@ -1,8 +1,5 @@
 #ifndef __LINUX_MSM_CAMERA_H
 #define __LINUX_MSM_CAMERA_H
-#ifdef CONFIG_ARCH_MSM8X60
-#include <media/msm_camera-8x60.h>
-#else
 #ifdef MSM_CAMERA_BIONIC
 #include <sys/types.h>
 #endif
@@ -1134,5 +1131,4 @@ struct img_plane_info {
 	uint8_t vpe_can_use;
 };
 
-#endif
 #endif /* __LINUX_MSM_CAMERA_H */
