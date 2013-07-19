@@ -365,6 +365,22 @@ obj-$(CONFIG_MACH_PYRAMID) += htc_util.o
 obj-$(CONFIG_MACH_PYRAMID) += board-pyramid-audio.o
 obj-$(CONFIG_MACH_PYRAMID) += board-pyramid-display.o
 
+obj-$(CONFIG_MACH_SHOOTER) += board-shooter.o
+obj-$(CONFIG_MACH_SHOOTER) += board-shooter-keypad.o
+obj-$(CONFIG_MACH_SHOOTER) += board-shooter-audio.o
+obj-$(CONFIG_MACH_SHOOTER) += htc_bdaddress.o board-shooter-rfkill.o
+ifeq ($(CONFIG_WIMAX),y)
+obj-$(CONFIG_MACH_SHOOTER) += board-shooter-mmc.o board-shooter-wifi.o board-common-wimax.o
+else
+obj-$(CONFIG_MACH_SHOOTER) += board-shooter-mmc.o board-shooter-wifi.o
+endif
+
+obj-$(CONFIG_MACH_SHOOTER_U) += board-shooter_u.o
+obj-$(CONFIG_MACH_SHOOTER_U) += board-shooter_u-keypad.o
+obj-$(CONFIG_MACH_SHOOTER_U) += board-shooter_u-audio.o
+obj-$(CONFIG_MACH_SHOOTER_U) += htc_sleep_clk.o htc_bdaddress.o board-shooter_u-rfkill.o
+obj-$(CONFIG_MACH_SHOOTER_U) += board-shooter_u-mmc.o board-shooter_u-wifi.o
+
 CFLAGS_msm_vibrator.o += -Idrivers/staging/android
 CFLAGS_board-9615.o += -Idrivers/usb/gadget
 
