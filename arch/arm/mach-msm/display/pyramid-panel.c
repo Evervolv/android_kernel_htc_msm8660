@@ -12,9 +12,9 @@
  *
  */
 
-#include "../../../drivers/video/msm/msm_fb.h"
-#include "../../../drivers/video/msm/mipi_dsi.h"
-#include "../../../drivers/video/msm/mdp4.h"
+#include "../../../../drivers/video/msm/msm_fb.h"
+#include "../../../../drivers/video/msm/mipi_dsi.h"
+#include "../../../../drivers/video/msm/mdp4.h"
 
 #include <mach/gpio.h>
 #include <mach/panel_id.h>
@@ -24,8 +24,8 @@
 #include <linux/pmic8058-pwm.h>
 #include <mach/debug_display.h>
 
-#include "devices.h"
-#include "board-pyramid.h"
+#include "../devices.h"
+#include "../board-pyramid.h"
 
 #ifdef CONFIG_FB_MSM_TRIPLE_BUFFER
 #define MSM_FB_PRIM_BUF_SIZE (960 * ALIGN(540, 32) * 4 * 3)
