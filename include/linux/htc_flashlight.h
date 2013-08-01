@@ -66,8 +66,9 @@ struct flashlight_platform_data {
 	void (*gpio_init) (void);
 	uint32_t torch;
 	uint32_t flash;
+	uint32_t torch_set1;
+	uint32_t torch_set2;
 	uint32_t flash_duration_ms;
-	uint8_t led_count;
 };
 int aat1277_flashlight_control(int mode);
 #endif
