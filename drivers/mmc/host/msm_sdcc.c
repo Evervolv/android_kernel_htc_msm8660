@@ -4417,7 +4417,7 @@ static void msmsdcc_late_resume(struct early_suspend *h)
 
 #ifdef CONFIG_WIMAX
 	if (is_wifi_platform(host->plat))
-		pr_infof"[WIFI] [MMC] %s: %s enter\n", mmc_hostname(host->mmc), __func__);
+		pr_info("[WIFI] [MMC] %s: %s enter\n", mmc_hostname(host->mmc), __func__);
 #endif
 
 	if (host->polling_enabled) {
