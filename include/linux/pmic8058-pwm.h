@@ -86,6 +86,8 @@ int pm8058_pwm_lut_config(struct pwm_device *pwm, int period_us,
 
 int pm8058_pwm_lut_enable(struct pwm_device *pwm, int start);
 
+int pwm_configure(struct pwm_device *pwm, struct pm8058_pwm_period *pwm_conf, int bypass_lut, int pwm_value);
+
 int pm8058_pwm_set_dtest(struct pwm_device *pwm, int enable);
 
 int pm8058_pwm_config_led(struct pwm_device *pwm, int id,
