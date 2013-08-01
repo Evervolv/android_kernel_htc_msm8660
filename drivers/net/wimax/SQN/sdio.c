@@ -2020,73 +2020,6 @@ static void sqn_sdio_remove(struct sdio_func *func)
 	sqn_pr_leave();
 }
 
-int sqn_sdio_suspend(struct sdio_func *func, pm_message_t msg)
-{
-	int rv = 0;
-	/* unsigned long irq_flags = 0; */
-	struct sqn_sdio_card *sqn_card = sdio_get_drvdata(func);
-
-	sqn_pr_enter();
-	sqn_pr_info("%s: enter\n", __func__);
-	sqn_pr_dbg("pm_message = %x\n", msg.event);
-
-	WARN(!skb_queue_empty(&sqn_card->tx_queue)
-		, "BANG!!! TX queue is not empty in suspend(): %d"
-		, skb_queue_len(&sqn_card->tx_queue));
-
-	WARN(!skb_queue_empty(&sqn_card->rx_queue)
-		, "BANG!!! RX queue is not empty in suspend(): %d"
-		, skb_queue_len(&sqn_card->rx_queue));
-
-	if (sqn_card->is_card_sleeps) {
-		sqn_pr_info("card already asleep (pm_message = 0x%x)\n"
-			, msg.event);
-		goto out;
-	}
-
-	/* Do nothing when system goes to power off */
-	if (PM_EVENT_SUSPEND != msg.event) {
-		sqn_pr_warn("Not supported pm_message = %x\n", msg.event);
-		goto out;
-	}
-
-	if (sqn_notify_host_sleep(func)) {
-		sqn_pr_warn("Failed to suspend\n");
-		goto out;
-	}
-out:
-
-	mmc_wimax_enable_host_wakeup(1);
-
-	sqn_pr_info("%s: leave\n", __func__);
-	sqn_pr_leave();
-	return rv;
-}
-
-
-int sqn_sdio_resume(struct sdio_func *func)
-{
-	int rv = 0;
-	struct sqn_sdio_card *sqn_card = sdio_get_drvdata(func);
-
-	sqn_pr_enter();
-	sqn_pr_info("%s: enter\n", __func__);
-
-	if (netif_queue_stopped(sqn_card->priv->dev)) {
-		sqn_pr_dbg("wake netif_queue\n");
-		netif_wake_queue(sqn_card->priv->dev);
-	}
-
-	/* Dima: we don't need this, card will be woken up when there will be some TX data*/
-	/* sqn_notify_host_wakeup(func); */
-
-	mmc_wimax_enable_host_wakeup(0);
-
-	sqn_pr_info("%s: leave\n", __func__);
-	sqn_pr_leave();
-	return rv;
-}
-
 int sqn_sdio_dump_net_pkt(int on)
 {
 	printk(KERN_INFO "[WIMAX] [SDIO] %s: dump_net_pkt: %d\n", __func__, on);
@@ -2096,12 +2029,10 @@ int sqn_sdio_dump_net_pkt(int on)
 }
 
 static struct sdio_driver sqn_sdio_driver = {
-	.name		= SQN_MODULE_NAME
-	, .id_table	= sqn_sdio_ids
-	, .probe	= sqn_sdio_probe
-	, .remove	= sqn_sdio_remove
-	, .suspend 	= sqn_sdio_suspend
-	, .resume	= sqn_sdio_resume
+	.name     = SQN_MODULE_NAME,
+	.probe	  = sqn_sdio_probe,
+	.remove	  = sqn_sdio_remove,
+	.id_table = sqn_sdio_ids,
 };
 
 

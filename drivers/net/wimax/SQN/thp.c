@@ -27,6 +27,7 @@
 #include <linux/netdevice.h>
 #include <linux/cdev.h>
 #include <linux/byteorder/generic.h>
+#include <linux/module.h>
 
 #include "version.h"
 #include "msg.h"

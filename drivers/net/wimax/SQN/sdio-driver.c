@@ -58,7 +58,7 @@ MODULE_PARM_DESC(bootrom_name, "name of bootrom binary");
 #endif
 
 module_param(firmware_name, charp, S_IRUGO);
-module_param(load_firmware, bool, S_IRUGO);
+module_param(load_firmware, bint, S_IRUGO);
 
 struct sqn_private *g_priv = 0;
 
