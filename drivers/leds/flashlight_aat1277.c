@@ -19,6 +19,7 @@
 
 
 #include <asm/gpio.h>
+
 #include <linux/earlysuspend.h>
 #include <linux/platform_device.h>
 #include <linux/htc_flashlight.h>
@@ -27,6 +28,7 @@
 #include <linux/leds.h>
 #include <linux/hrtimer.h>
 #include <linux/slab.h>
+#include <linux/module.h>
 
 #define FLT_DBG_LOG(fmt, ...) \
 		printk(KERN_DEBUG "[FLT]" fmt, ##__VA_ARGS__)
