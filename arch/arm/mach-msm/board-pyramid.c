@@ -90,7 +90,6 @@
 #include <mach/cable_detect.h>
 #include <mach/board-msm8660.h>
 #include <mach/htc_headset_mgr.h>
-#include <mach/htc_headset_gpio.h>
 #include <mach/htc_headset_pmic.h>
 #include <mach/htc_headset_8x60.h>
 
@@ -133,20 +132,15 @@
 #define PHY_BASE_ADDR1       0x48000000
 #define SIZE_ADDR1           0x28000000
 
-#define MSM_ION_SF_SIZE      0x3000000
+#define MSM_ION_SF_SIZE      0x2C00000
 #define MSM_ION_CAMERA_SIZE  0x2000000
-#define MSM_ION_ROTATOR_SIZE 0x654000
 #define MSM_ION_MM_FW_SIZE   0x200000
 #define MSM_ION_MM_SIZE      0x3D00000
 #define MSM_ION_MFC_SIZE     0x100000
 #define MSM_ION_WB_SIZE      0x2FD000
 #define MSM_ION_AUDIO_SIZE   0x4CF000
 
-#ifdef CONFIG_MSM_ROTATOR
-#define MSM_ION_HEAP_NUM     9
-#else
 #define MSM_ION_HEAP_NUM     8
-#endif
 
 #define MSM_ION_CAMERA_BASE  0x40E00000
 #define MSM_ION_WB_BASE      0x46400000
@@ -716,7 +710,7 @@ static struct msm_rpmrs_platform_data msm_rpmrs_data __initdata = {
 		[MSM_RPMRS_VDD_DIG_RET_LOW]     = 500,
 		[MSM_RPMRS_VDD_DIG_RET_HIGH]    = 750,
 		[MSM_RPMRS_VDD_DIG_ACTIVE]      = 1000,
-		[MSM_RPMRS_VDD_DIG_MAX]         = 1250,
+		[MSM_RPMRS_VDD_DIG_MAX]         = 1200,
 	},
 	.vdd_mask = 0xFFF,
 	.rpmrs_target_id = {
@@ -2137,7 +2131,7 @@ static struct regulator_consumer_supply vreg_consumers_PM8901_S4_PC[] = {
 static struct rpm_regulator_init_data rpm_regulator_early_init_data[] = {
 	
 	RPM_SMPS(PM8058_S0, 0, 1, 1,  500000, 1325000, SMPS_HMIN, 1p92),
-	RPM_SMPS(PM8058_S1, 0, 1, 1,  500000, 1325000, SMPS_HMIN, 1p92),
+	RPM_SMPS(PM8058_S1, 0, 1, 1,  500000, 1200000, SMPS_HMIN, 1p92),
 };
 
 static struct rpm_regulator_init_data rpm_regulator_init_data[] = {
@@ -2360,24 +2354,11 @@ static struct platform_device msm_adc_device = {
 	},
 };
 
-static struct htc_headset_gpio_platform_data htc_headset_gpio_data = {
-	.hpin_gpio		= PYRAMID_GPIO_AUD_HP_DET,
-	.key_enable_gpio	= 0,
-	.mic_select_gpio	= 0,
-};
-
-static struct platform_device htc_headset_gpio = {
-	.name	= "HTC_HEADSET_GPIO",
-	.id	= -1,
-	.dev	= {
-		.platform_data	= &htc_headset_gpio_data,
-	},
-};
-
 static struct htc_headset_pmic_platform_data htc_headset_pmic_data = {
 	.driver_flag		= 0,
-	.hpin_gpio			= 0,
+	.hpin_gpio			= PYRAMID_GPIO_AUD_HP_DET,
 	.hpin_irq			= 0,
+	.key_gpio			= PM8058_GPIO_PM_TO_SYS(PYRAMID_AUD_REMO_PRES),
 	.key_irq			= 0,
 	.key_enable_gpio	= 0,
 	.adc_mic_bias		= {0, 0},
@@ -2410,7 +2391,6 @@ static struct platform_device htc_headset_8x60 = {
 static struct platform_device *headset_devices[] = {
 	&htc_headset_pmic,
 	&htc_headset_8x60,
-	&htc_headset_gpio,
 };
 
 static struct headset_adc_config htc_headset_mgr_config[] = {
@@ -2440,8 +2420,8 @@ static struct htc_headset_mgr_platform_data htc_headset_mgr_data = {
 	.driver_flag		= 0,
 	.headset_devices_num	= ARRAY_SIZE(headset_devices),
 	.headset_devices	= headset_devices,
-	.headset_config_num	= 0,
-	.headset_config		= 0,
+	.headset_config_num	= ARRAY_SIZE(htc_headset_mgr_config),
+	.headset_config		= htc_headset_mgr_config,
 };
 
 static struct platform_device htc_headset_mgr = {
@@ -2731,16 +2711,6 @@ static struct ion_platform_data ion_pdata = {
 			.memory_type = ION_EBI_TYPE,
 			.extra_data = (void *)&co_ion_pdata,
 		},
-#ifdef CONFIG_MSM_ROTATOR
-		{
-			.id	= ION_CP_ROTATOR_HEAP_ID,
-			.type	= ION_HEAP_TYPE_CARVEOUT,
-			.name	= ION_ROTATOR_HEAP_NAME,
-			.size	= MSM_ION_ROTATOR_SIZE,
-			.memory_type = ION_EBI_TYPE,
-			.extra_data = &co_ion_pdata,
-		},
-#endif
 		{
 			.id	= ION_CAMERA_HEAP_ID,
 			.type	= ION_HEAP_TYPE_CARVEOUT,
@@ -2802,9 +2772,6 @@ static void __init reserve_ion_memory(void)
 	msm8x60_reserve_table[MEMTYPE_SMI].size += MSM_ION_MM_SIZE;
 	msm8x60_reserve_table[MEMTYPE_SMI].size += MSM_ION_MFC_SIZE;
 	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_SF_SIZE;
-#ifdef CONFIG_MSM_ROTATOR
-	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_ROTATOR_SIZE;
-#endif
 	msm8x60_reserve_table[MEMTYPE_EBI1].size += MSM_ION_AUDIO_SIZE;
 #endif
 }
@@ -4471,14 +4438,6 @@ static void __init msm8x60_init(struct msm_board_data *board_data)
 
 	pm8058_platform_data.leds_pdata = &pm8058_flash_leds_data;
 	pm8058_platform_data.vibrator_pdata = &pm8058_vib_pdata;
-
-	if (system_rev > 2 || speed_bin == 0x1) {
-		htc_headset_pmic_data.key_gpio =
-			PM8058_GPIO_PM_TO_SYS(PYRAMID_AUD_REMO_PRES);
-		htc_headset_mgr_data.headset_config_num =
-			ARRAY_SIZE(htc_headset_mgr_config);
-		htc_headset_mgr_data.headset_config = htc_headset_mgr_config;
-	}
 
 	if (SOCINFO_VERSION_MAJOR(socinfo_get_version()) != 1)
 		platform_add_devices(msm8660_footswitch,
