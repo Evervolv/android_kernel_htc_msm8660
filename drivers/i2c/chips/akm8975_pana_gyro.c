@@ -17,6 +17,7 @@
 #include <linux/slab.h>
 #include <linux/irq.h>
 #include <linux/miscdevice.h>
+#include <linux/module.h>
 #include <linux/gpio.h>
 #include <linux/uaccess.h>
 #include <linux/delay.h>

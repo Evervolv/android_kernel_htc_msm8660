@@ -31,6 +31,7 @@
 #include <linux/poll.h>
 #include <linux/gpio.h>
 #include <linux/akm8975.h>
+#include <linux/module.h>
 
 #ifndef HTC_VERSION
 #include <linux/i2c/ak8973.h>
